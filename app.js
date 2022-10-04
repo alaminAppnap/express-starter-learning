@@ -12,6 +12,19 @@ var middlewareRouter = require('./routes/middleware')
 
 var app = express();
 
+/** Start express error middleware */
+
+const errorMiddleware = (err,req,res,nex)=>{
+  console.log(err.message);
+
+  res.status(500).send(err.message);
+}
+
+middlewareRouter.use(errorMiddleware)
+
+/** End express error middleware */
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
