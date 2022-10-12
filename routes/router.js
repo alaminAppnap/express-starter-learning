@@ -16,5 +16,25 @@ var routes = express.Router();
     res.send("this is router tutorial practice");
    })
 
+   /** we can make resource route by route method */
+
+   routes.route('/user')
+   .all((req,res,next)=>{
+        console.log("this is log middleware which is all route under user will log");
+        next()
+    })
+   .get((req,res,next)=>{
+        res.send("this is get method");
+    })
+   .post((req,res,next)=>{
+        res.send("this is post method");
+    })
+   .put((req,res,next)=>{
+        res.send("this is put method");
+    })
+    .delete((req,res,next)=>{
+        res.send("this is delete method");
+    })
+
    module.exports = routes;
    
