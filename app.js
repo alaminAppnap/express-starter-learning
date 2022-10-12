@@ -7,9 +7,23 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin')
 var usersRouter = require('./routes/users');
-
+var middlewareRouter = require('./routes/middleware');
+var routerTutorialRouter = require('./routes/router');
 
 var app = express();
+
+/** Start express error middleware */
+
+const errorMiddleware = (err,req,res,nex)=>{
+  console.log(err.message);
+
+  res.status(500).send(err.message);
+}
+
+middlewareRouter.use(errorMiddleware)
+
+/** End express error middleware */
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,9 +35,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+/** router register */
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/admin',adminRouter)
+app.use('/admin',adminRouter);
+app.use('/middleware',middlewareRouter);
+app.use('/router-tutorial',routerTutorialRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
