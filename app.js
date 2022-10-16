@@ -10,6 +10,7 @@ var usersRouter = require('./routes/users');
 var middlewareRouter = require('./routes/middleware');
 var routerTutorialRouter = require('./routes/router');
 var errorHandlingRouter = require('./routes/error-handling');
+var fileUploadRouter = require('./routes/file-upload');
 
 var app = express();
 
@@ -36,13 +37,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-/** router register */
+/** start router register */
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin',adminRouter);
 app.use('/middleware',middlewareRouter);
 app.use('/router-tutorial',routerTutorialRouter);
 app.use('/error-handling',errorHandlingRouter);
+app.use('/file-upload',fileUploadRouter);
+/** end router register */
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
