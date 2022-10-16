@@ -23,6 +23,7 @@ const errorMiddleware = (err,req,res,nex)=>{
 }
 
 middlewareRouter.use(errorMiddleware)
+fileUploadRouter.use(errorMiddleware)
 
 /** End express error middleware */
 

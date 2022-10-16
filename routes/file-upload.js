@@ -1,14 +1,55 @@
 const express = require('express')
-var fileUploadRouter = express.Router();
-var multer = require('multer')
+const fileUploadRouter = express.Router();
+const multer = require('multer');
+const path = require('path');
 
 
 /** File upload folder */
 const FILE_UPLOAD_FOLDER = "./uploads";
 
+/** storage configure with custom filename */
+const storage = multer.diskStorage({
+  destination:(req,file,cb)=>{
+    cb(null,FILE_UPLOAD_FOLDER);
+  },
+  filename:(req,file,cb)=>{
+    const fileExtenction = path.extname(file.originalname);
+    const fileName = file.originalname
+                          .replace(fileExtenction,"")
+                          .toLocaleLowerCase()
+                          .split(" ")
+                          .join("-")+"-"+Date.now();
+
+    cb(null,fileName+fileExtenction);
+  }
+});
+
 /** Prepare the final multer upload object */
 var upload = multer({
-    dest:FILE_UPLOAD_FOLDER
+    storage:storage,
+    limits:{
+      fileSize:1000000, //1 mb file validation
+    },
+    fileFilter:(req,file,cb)=>{
+      // console.log(file)  // this give us fieldname: 'image1',originalname: 'Screenshot from 2022-09-12 20-37-18.png',encoding: '7bit', mimetype: 'image/png'
+      if(file.fieldname == "image1"){
+        if(file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg"){
+          cb(null,true) //cb hosse callback first param hosse error nibe second true false nibe then true hole next kaj korbe
+        }
+        else{
+          cb(new Error("only jpg,jpeg and png file allowd"));
+        }
+      }
+      else if(file.filename == "image2"){
+        if(file.mimetype === "pdf"){
+          cb(null,true) //cb hosse callback first param hosse error nibe second true false nibe then true hole next kaj korbe
+        }
+        else{
+          cb(new Error("only pdf file allowd"));
+        }
+      }
+
+    }
 });
 
 /* GET users listing. */
@@ -19,6 +60,7 @@ fileUploadRouter.get('/', function(req, res, next) {
 /** single file upload */
 fileUploadRouter.post('/single',upload.single('image1'),(req,res)=>{ /** uploadMulter is middleware and single means single file upload */
   console.log(`successfully uploaded`);
+  console.log(`here is file informatin after upload file`,req.file)
   res.send("successfully uploaded");
 })
 
