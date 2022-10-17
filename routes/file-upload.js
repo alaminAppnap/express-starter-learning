@@ -7,7 +7,8 @@ const path = require('path');
 /** File upload folder */
 const FILE_UPLOAD_FOLDER = "./uploads";
 
-/** storage configure with custom filename */
+
+/**============================= storage configure with custom filename ======================================*/
 const storage = multer.diskStorage({
   destination:(req,file,cb)=>{
     cb(null,FILE_UPLOAD_FOLDER);
@@ -20,27 +21,28 @@ const storage = multer.diskStorage({
                           .split(" ")
                           .join("-")+"-"+Date.now();
 
-    cb(null,fileName+fileExtenction);
+    cb(null,fileName+fileExtenction);  //cb hosse callback cb(1st,secont) cb 1st param means error and second means true and take data also
   }
 });
 
-/** Prepare the final multer upload object */
+
+/**=========================Prepare the final multer upload object============================== */
 var upload = multer({
     storage:storage,
     limits:{
       fileSize:1000000, //1 mb file validation
     },
     fileFilter:(req,file,cb)=>{
-      console.log(file)  // this give us fieldname: 'image1',originalname: 'Screenshot from 2022-09-12 20-37-18.png',encoding: '7bit', mimetype: 'image/png'
-      if(file.fieldname == "image1"){
-        if(file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg"){
+      //console.log(file)  // this give us fieldname: 'image1',originalname: 'Screenshot from 2022-09-12 20-37-18.png',encoding: '7bit', mimetype: 'image/png'
+      if(file.filename == "image1"){
+        if(file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg"){
           cb(null,true) //cb hosse callback first param hosse error nibe second true false nibe then true hole next kaj korbe
         }
         else{
           cb(new Error("only jpg,jpeg and png file allowd"));
         }
       }
-      else if(file.filename == "image2"){
+      if(file.filename == "image2"){
         if(file.mimetype === "pdf"){
           cb(null,true) //cb hosse callback first param hosse error nibe second true false nibe then true hole next kaj korbe
         }
@@ -51,6 +53,9 @@ var upload = multer({
 
     }
 });
+
+
+/** ===============================Start Route ============================================================================== */
 
 /* GET users listing. */
 fileUploadRouter.get('/', function(req, res, next) {
@@ -74,8 +79,8 @@ fileUploadRouter.post('/multiple',upload.array('image1',5),(req,res)=>{ /** uplo
 /** uploadMulter is middleware and upload.fields means multiple field image file */
 
 fileUploadRouter.post('/multiple-field',upload.fields([
-    {name:"image1",maxCount:2},
-    {name:"image2",maxCount:2},
+    {name:"image1",maxCount:5},
+    {name:"image2",maxCount:5},
 ]),(req,res)=>{ 
   console.log(`successfully uploaded multiple file by multiple field`);
   res.send("successfully uploaded multiple file  by multiple field");
