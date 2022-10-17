@@ -31,7 +31,7 @@ var upload = multer({
       fileSize:1000000, //1 mb file validation
     },
     fileFilter:(req,file,cb)=>{
-      // console.log(file)  // this give us fieldname: 'image1',originalname: 'Screenshot from 2022-09-12 20-37-18.png',encoding: '7bit', mimetype: 'image/png'
+      console.log(file)  // this give us fieldname: 'image1',originalname: 'Screenshot from 2022-09-12 20-37-18.png',encoding: '7bit', mimetype: 'image/png'
       if(file.fieldname == "image1"){
         if(file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg"){
           cb(null,true) //cb hosse callback first param hosse error nibe second true false nibe then true hole next kaj korbe
