@@ -25,3 +25,9 @@ jobs:
     needs: build
     name: Dev deployment process
     runs-on: ubuntu-latest
+    steps:
+      - name: Group of log lines
+        run: |
+          echo "::group::My title"
+          echo "Inside group"
+          echo "::endgroup::"
