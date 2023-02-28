@@ -1,0 +1,29 @@
+name: Deploy my protfolio application on dev server
+
+on:
+  push:
+    branches:
+      - v1.x
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.4.2"
+          script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            npm install
+            npm run start
+
+  deploy:
+    needs: build
+    name: Dev deployment process
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
