@@ -3,7 +3,7 @@ name: Deploy my protfolio application on dev server
 on:
   push:
     branches:
-      - v1.x
+      - master
 
 jobs:
   build:
